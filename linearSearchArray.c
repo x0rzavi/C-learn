@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+void find(int*, int, int);
+
 int main() {
         int n;
         printf("Enter no of elements: ");
@@ -11,10 +13,17 @@ int main() {
                 scanf("%d", &arr[i]);
         }
 
-        int e, count = 0;
+        int e;
         printf("Enter element to search: ");
         scanf("%d", &e);
 
+        find(arr, n, e);
+
+        return 0;
+}
+
+void find(int *arr, int n, int e) {
+        int count = 0;
         for(int i = 0; i < n; i++) {
                 if(arr[i] == e) {
                         printf("Element found at index %d\n", i);
@@ -25,6 +34,4 @@ int main() {
         if(count == 0) {
                 printf("Element was not found\n");
         }
-
-        return 0;
 }

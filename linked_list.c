@@ -18,23 +18,22 @@ void delete_bef();
 void delete_aft();
 void delete_pos();
 void display();
-void count();
+int count();
 
 int main() {
-        printf("1. INSERT AT BEGINNING\n");
-        printf("2. INSERT AT END\n");
-        printf("3. DELETE FROM BEGINNING\n");
-        printf("4. DELETE FROM END\n");
-        printf("5. INSERT BEFORE NODE\n");
-        printf("6. INSERT AFTER NODE\n");
-        printf("7. INSERT AT POSITION\n");
-        printf("8. DELETE BEFORE NODE\n");
-        printf("9. DELETE AFTER NODE\n");
-        printf("10. DELETE AT POSITION\n");
-        printf("11. DISPLAY\n");
-        printf("12. COUNT ITEMS\n");
-        printf("13. EXIT\n");
-        
+        printf(" 1. Insert at Beginning\n");
+        printf(" 2. Insert at End\n");
+        printf(" 3. Delete from Beginning\n");
+        printf(" 4. Delete from End\n");
+        printf(" 5. Insert before Node\n");
+        printf(" 6. Insert after Node\n");
+        printf(" 7. Insert at Position\n");
+        printf(" 8. Delete before Node\n");
+        printf(" 9. Delete after Node\n");
+        printf("10. Delete at Position\n");
+        printf("11. Display\n");
+        printf("12. Count Items\n");
+        printf("13. Exit\n");
         while (1) {
                 int c; printf("\nEnter choice: "); scanf("%d", &c);
                 switch (c) {
@@ -44,6 +43,7 @@ int main() {
                         case 4: delete_end(); break;
                         case 5: insert_bef(); break;
                         case 6: insert_aft(); break;
+                        case 7: insert_pos(); break;
                         case 11: display(); break;
                         case 12: count(); break;
                         case 13: exit(1);
@@ -75,7 +75,7 @@ void display() {
         printf("\n");
 }
 
-void count() {
+int count() {
         int c = 0;
         temp = start;
         while (temp != NULL) {
@@ -83,6 +83,7 @@ void count() {
                 temp = temp->next;
         }
         printf("Item count: %d\n", c);
+        return c;
 }
 
 void insert_begn() {
@@ -173,3 +174,24 @@ void insert_aft() {
         }
 }
 
+void insert_pos() {
+        int c = count();
+        int pos; printf("Enter position to insert at: "); scanf("%d", &pos);
+        if (pos == 1) {
+                insert_begn();
+        } else if (pos == c) {
+                insert_end();
+        } else if (pos > 1 && pos < c) {
+                int i = 1;
+                temp = start;
+                while (temp != NULL && i < pos) { // iterating pos times
+                        temp = temp->next;
+                        i++;
+                }
+                create();
+                new_node->next = temp->next; // inserting after node
+                temp->next = new_node;
+        } else {
+                printf("Invalid postion!\n");
+        }
+}

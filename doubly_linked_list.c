@@ -76,12 +76,23 @@ void display() {
                 printf("Underflow!");
         } else {
                 temp = start;
-                printf("Linked list elements: START -> ");
+                // checking forward links
+                printf("Linked list elements (forward): START -> ");
                 while (temp != NULL) {
                         printf("%d -> ", temp->data);
+                        prev = temp;
                         temp = temp->next;
                 }
                 printf("END");
+                
+                // // checking back links
+                // printf("\n");
+                // printf("Linked list elements (backward): START -> ");
+                // while (prev != NULL) {
+                //         printf("%d -> ", prev->data);
+                //         prev = prev->prev;
+                // }
+                // printf("END");
         }
         printf("\n");
 }

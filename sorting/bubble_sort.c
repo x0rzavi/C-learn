@@ -5,6 +5,7 @@
 int main() {
         int n = 6;
         int arr[] = {12, 45, 23, 51, 19, 8};
+
         for (int i = 0; i < n - 1; i++) { // for n sized array, sorting procedure needs to be done n - 1 times
                 for (int j = 0; j < n - 1 - i; j++) { // traversing the array until 2nd last element; (j + 1) takes care of last element; ignore bubbled element (i) at last
                         if (arr[j] > arr[j + 1]) { // check if adjcent is smaller or not

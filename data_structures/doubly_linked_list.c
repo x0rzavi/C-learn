@@ -4,6 +4,7 @@
 
 typedef struct node {
   int data;
+  struct node *prev;
   struct node *next;
 } node;
 
@@ -16,13 +17,13 @@ void insert_before(node **head, node **tail, int *node_count, int data,
                    int element);
 void insert_after(node **head, node **tail, int *node_count, int data,
                   int element);
-void delete_beginning(node **head, int *node_count);
+void delete_beginning(node **head, node **tail, int *node_count);
 void delete_end(node **head, node **tail, int *node_count);
 void delete_position(node **head, node **tail, int *node_count,
                      int index); // indexing starts AT 1 and NOT 0
-void delete_before(node **head, int *node_count, int element);
+void delete_before(node **head, node **tail, int *node_count, int element);
 void delete_after(node **head, node **tail, int *node_count, int element);
-void display(node **head, int node_count);
+void display(node **head, node **tail, int node_count);
 void free_linked_list(node **head, int *node_count);
 void get_node_count(int node_count);
 void linear_search(node **head, int element);
@@ -62,12 +63,12 @@ int main(void) {
       case 3: insert_position(&head, &tail, &node_count, get_data("Enter data to insert: "), get_data("Enter index to insert at: ")); break;
       case 4: insert_before(&head, &tail, &node_count, get_data("Enter data to insert: "), get_data("Enter element to insert before: ")); break;
       case 5: insert_after(&head, &tail, &node_count, get_data("Enter data to insert: "), get_data("Enter element to insert after: ")); break;
-      case 6: delete_beginning(&head, &node_count); break;
+      case 6: delete_beginning(&head, &tail, &node_count); break;
       case 7: delete_end(&head, &tail, &node_count); break;
       case 8: delete_position(&head, &tail, &node_count, get_data("Enter index to delete at: ")); break;
-      case 9: delete_before(&head, &node_count, get_data("Enter element to delete before: ")); break;
+      case 9: delete_before(&head, &tail, &node_count, get_data("Enter element to delete before: ")); break;
       case 10: delete_after(&head, &tail, &node_count, get_data("Enter element to delete after: ")); break;
-      case 11: display(&head, node_count); break;
+      case 11: display(&head, &tail, node_count); break;
       case 12: get_node_count(node_count); break;
       case 13: linear_search(&head, get_data("Enter element to search: ")); break;
       case 98: free_linked_list(&head, &node_count); break;
@@ -81,19 +82,23 @@ int main(void) {
 node *create_node(int data) {
   node *new_node = malloc(sizeof(node));
   new_node->data = data;
+  new_node->prev = NULL;
   new_node->next = NULL;
   return new_node;
 }
 
 void insert_beginning(node **head, node **tail, int *node_count, int data) {
   node *new_node = create_node(data);
-  new_node->next = *head;
-  *head = new_node;
-  if (*tail == NULL) { // no tail node
+  if (*head == NULL) {
+    *head = new_node;
     *tail = new_node;
+  } else {
+    (*head)->prev = new_node;
+    new_node->next = *head;
+    *head = new_node;
   }
   (*node_count)++;
-  display(head, *node_count);
+  display(head, tail, *node_count);
 }
 
 void insert_end(node **head, node **tail, int *node_count, int data) {
@@ -102,10 +107,11 @@ void insert_end(node **head, node **tail, int *node_count, int data) {
     *head = new_node;
   } else {
     (*tail)->next = new_node;
+    new_node->prev = *tail;
   }
   *tail = new_node;
   (*node_count)++;
-  display(head, *node_count);
+  display(head, tail, *node_count);
 }
 
 void insert_position(node **head, node **tail, int *node_count, int data,
@@ -127,10 +133,13 @@ void insert_position(node **head, node **tail, int *node_count, int data,
          i++) { // traverse UNTIL JUST BEFORE position to insert
       trav = trav->next;
     }
-    new_node->next = trav->next;
+    trav->next->prev = new_node; // ordering is important
+    new_node->next =
+        trav->next; // change such that it wont affect later pointers
     trav->next = new_node;
+    new_node->prev = trav;
     (*node_count)++;
-    display(head, *node_count);
+    display(head, tail, *node_count);
   } else {
     printf("Invalid index %d\n\n", index);
   }
@@ -156,10 +165,13 @@ void insert_before(node **head, node **tail, int *node_count, int data,
   }
   if (trav->next != NULL) { // stopped BEFORE a node; node found
     node *new_node = create_node(data);
-    new_node->next = trav->next;
+    trav->next->prev = new_node; // ordering is important
+    new_node->next =
+        trav->next; // change such that it wont affect later pointers
     trav->next = new_node;
+    new_node->prev = trav;
     (*node_count)++;
-    display(head, *node_count);
+    display(head, tail, *node_count);
   } else {
     printf("Element %d not found\n", element);
   }
@@ -181,8 +193,13 @@ void insert_after(node **head, node **tail, int *node_count, int data,
 
   if (trav != NULL) { // stopped ON a node; node found
     node *new_node = create_node(data);
-    new_node->next = trav->next;
+    if (trav->next != NULL) { // if node to insert after is 1st and only node
+      trav->next->prev = new_node; // ordering is important
+    }
+    new_node->next =
+        trav->next; // change such that it wont affect later pointers
     trav->next = new_node;
+    new_node->prev = trav;
     (*node_count)++;
     if (trav == *tail) {
       *tail = new_node; // update tail node ptr
@@ -190,10 +207,10 @@ void insert_after(node **head, node **tail, int *node_count, int data,
   } else {
     printf("Element %d not found\n", element);
   }
-  display(head, *node_count);
+  display(head, tail, *node_count);
 }
 
-void delete_beginning(node **head, int *node_count) {
+void delete_beginning(node **head, node **tail, int *node_count) {
   if (*head == NULL) {
     printf("Linked list empty\n");
     return;
@@ -201,10 +218,13 @@ void delete_beginning(node **head, int *node_count) {
 
   node *temp = *head;
   *head = (*head)->next;
+  if ((*head) != NULL) { // if more than 1 node
+    (*head)->prev = NULL;
+  }
   printf("Deleted node with data: %d\n", temp->data);
   free(temp);
   (*node_count)--;
-  display(head, *node_count);
+  display(head, tail, *node_count);
 }
 
 void delete_end(node **head, node **tail, int *node_count) {
@@ -229,13 +249,13 @@ void delete_end(node **head, node **tail, int *node_count) {
     (*tail)->next = NULL;
     (*node_count)--;
   }
-  display(head, *node_count);
+  display(head, tail, *node_count);
 }
 
 void delete_position(node **head, node **tail, int *node_count,
                      int index) { // indexing starts AT 1 and NOT 0
   if (index == 1) {
-    delete_beginning(head, node_count);
+    delete_beginning(head, tail, node_count);
     return;
   }
 
@@ -253,16 +273,17 @@ void delete_position(node **head, node **tail, int *node_count,
       curr = curr->next;
     }
     prev->next = curr->next;
+    curr->next->prev = prev;
     printf("Deleted node with data: %d\n", curr->data);
     free(curr);
     (*node_count)--;
-    display(head, *node_count);
+    display(head, tail, *node_count);
   } else {
     printf("Invalid index %d\n\n", index);
   }
 }
 
-void delete_before(node **head, int *node_count, int element) {
+void delete_before(node **head, node **tail, int *node_count, int element) {
   if (*head == NULL) {
     printf("Linked list empty\n");
     return;
@@ -285,13 +306,15 @@ void delete_before(node **head, int *node_count, int element) {
   if (curr->next != NULL) {
     if (prev == NULL) { // if node to delete is 1st node
       *head = curr->next;
+      (*head)->prev = NULL;
     } else {
       prev->next = curr->next;
+      curr->next->prev = prev;
     }
     printf("Deleted node with data: %d\n", curr->data);
     free(curr);
     (*node_count)--;
-    display(head, *node_count);
+    display(head, tail, *node_count);
   } else {
     printf("Element %d not found\n", element);
   }
@@ -315,31 +338,41 @@ void delete_after(node **head, node **tail, int *node_count, int element) {
     trav->next = temp->next;
     if (trav->next == NULL) { // if trav is last node
       *tail = trav;
+    } else {
+      trav->next->prev = trav;
     }
     printf("Deleted node with data: %d\n", temp->data);
     free(temp);
     (*node_count)--;
-    display(head, *node_count);
+    display(head, tail, *node_count);
   } else {
     printf("Element %d not found or no more nodes to delete\n", element);
   }
 }
 
-void display(node **head, int node_count) {
+void display(node **head, node **tail, int node_count) {
   if (node_count == 0) {
     printf("Linked list empty\n\n");
     return;
   }
 
   // char buffer[50]; // TEST
-  printf("HEAD ->");
+  printf("HEAD <->");
   for (node *trav = *head; trav != NULL;
        trav = trav->next) { // using for loop instead of while
-    printf(" %d ->", trav->data);
+    printf(" %d <->", trav->data);
     // snprintf(buffer, sizeof(buffer), "%d ", trav->data); // TEST
     // printf("%s", buffer); // TEST
   }
-  printf(" TAIL\n\n");
+  printf(" TAIL\n");
+
+  printf("TAIL <->");
+  node *trav = *tail;
+  while (trav != NULL) {
+    printf(" %d <->", trav->data);
+    trav = trav->prev;
+  }
+  printf(" HEAD\n\n");
 }
 
 void free_linked_list(node **head, int *node_count) {

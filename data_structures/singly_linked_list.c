@@ -100,10 +100,12 @@ void insert_end(node **head, node **tail, int *node_count, int data) {
   node *new_node = create_node(data);
   if (*head == NULL) {
     *head = new_node;
+    *tail = new_node;
   } else {
-    (*tail)->next = new_node;
+    (*tail)->next = // NOLINT: *tail is never NULL so no NULL dereference
+        new_node;
+    *tail = new_node;
   }
-  *tail = new_node;
   (*node_count)++;
   display(head, *node_count);
 }
@@ -215,6 +217,8 @@ void delete_end(node **head, node **tail, int *node_count) {
 
   if (*head == *tail) { // if only 1 node present
     printf("Deleted node with data: %d\n", (*head)->data);
+    node *temp = *head;
+    free(temp);
     *head = NULL;
     *tail = NULL;
     (*node_count)--;

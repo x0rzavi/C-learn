@@ -48,16 +48,16 @@ int main(void) {
   printf("12. Count\n");
   printf("13. Linear search\n");
   printf("98. Clear list\n");
-  printf("99. Exit\n\n");
+  printf("99. Exit\n");
 
   while (true) {
     int choice;
-    printf("Enter choice: ");
+    printf("\nEnter choice: ");
     fflush(stdout);
     scanf("%d", &choice);
 
-    // clang-format off
     switch (choice) {
+      // clang-format off
       case 1: insert_beginning(&head, &tail, &node_count, get_data("Enter data to insert: ")); break;
       case 2: insert_end(&head, &tail, &node_count, get_data("Enter data to insert: ")); break;
       case 3: insert_position(&head, &tail, &node_count, get_data("Enter data to insert: "), get_data("Enter index to insert at: ")); break;
@@ -73,7 +73,7 @@ int main(void) {
       case 13: linear_search(&head, get_data("Enter element to search: ")); break;
       case 98: free_linked_list(&head, &node_count); break;
       case 99: free_linked_list(&head, &node_count); exit(0);
-      default: printf("Invalid choice\n\n");
+      default: printf("Invalid choice\n");
       // clang-format on
     }
   }
@@ -142,7 +142,7 @@ void insert_position(node **head, node **tail, int *node_count, int data,
     (*node_count)++;
     display(head, tail, *node_count);
   } else {
-    printf("Invalid index %d\n\n", index);
+    printf("Invalid index %d\n", index);
   }
 }
 
@@ -282,7 +282,7 @@ void delete_position(node **head, node **tail, int *node_count,
     (*node_count)--;
     display(head, tail, *node_count);
   } else {
-    printf("Invalid index %d\n\n", index);
+    printf("Invalid index %d\n", index);
   }
 }
 
@@ -355,7 +355,7 @@ void delete_after(node **head, node **tail, int *node_count, int element) {
 
 void display(node **head, node **tail, int node_count) {
   if (node_count == 0) {
-    printf("Linked list empty\n\n");
+    printf("Linked list empty\n");
     return;
   }
 
@@ -375,7 +375,7 @@ void display(node **head, node **tail, int node_count) {
     printf(" %d <->", trav->data);
     trav = trav->prev;
   }
-  printf(" HEAD\n\n");
+  printf(" HEAD\n");
 }
 
 void free_linked_list(node **head, int *node_count) {
@@ -387,7 +387,7 @@ void free_linked_list(node **head, int *node_count) {
     free(trav);
   }
   *node_count = 0;
-  printf("Cleared linked list\n\n");
+  printf("Cleared linked list\n");
 }
 
 int get_data(char *prompt) {
@@ -399,7 +399,7 @@ int get_data(char *prompt) {
 }
 
 void get_node_count(int node_count) {
-  printf("Number of node(s) is %d\n\n", node_count);
+  printf("Number of node(s) is %d\n", node_count);
 }
 
 void linear_search(node **head, int element) {
@@ -407,11 +407,11 @@ void linear_search(node **head, int element) {
   node *trav;
   for (trav = *head, i = 1; trav != NULL; trav = trav->next, i++) {
     if (trav->data == element) {
-      printf("Element %d found at index %d\n\n", element, i);
+      printf("Element %d found at index %d\n", element, i);
       found = 1;
     }
   }
   if (found == -1) {
-    printf("Element %d was not found\n\n", element);
+    printf("Element %d was not found\n", element);
   }
 }

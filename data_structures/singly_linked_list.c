@@ -55,8 +55,8 @@ int main(void) {
     fflush(stdout);
     scanf("%d", &choice);
 
+    // clang-format off
     switch (choice) {
-      // clang-format off
       case 1: insert_beginning(&head, &tail, &node_count, get_data("Enter data to insert: ")); break;
       case 2: insert_end(&head, &tail, &node_count, get_data("Enter data to insert: ")); break;
       case 3: insert_position(&head, &tail, &node_count, get_data("Enter data to insert: "), get_data("Enter index to insert at: ")); break;
@@ -73,8 +73,8 @@ int main(void) {
       case 98: free_linked_list(&head, &node_count); break;
       case 99: free_linked_list(&head, &node_count); exit(0);
       default: printf("Invalid choice\n");
-      // clang-format on
     }
+    // clang-format on
   }
 }
 

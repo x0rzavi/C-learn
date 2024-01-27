@@ -26,11 +26,10 @@ int main(void) {
   append_dynamic_array(&arr, &used, &size, 400);
   append_dynamic_array(&arr, &used, &size, 500);
   insert_dynamic_array(&arr, &used, &size, 600, 1);
-  access_dynamic_array(&arr, &used, 5);
+  access_dynamic_array(&arr, &used, 3);
   print_dynamic_array(&arr, &used);
   linear_search_dynamic_array(&arr, &used, 200);
   delete_dynamic_array(&arr, &used, 4);
-  deduct_dynamic_array(&arr, &used);
   deduct_dynamic_array(&arr, &used);
   print_dynamic_array(&arr, &used);
   free(arr);
@@ -44,7 +43,7 @@ void init_dynamic_array(int **arr, size_t *used, size_t *size,
 }
 
 void check_resize_dynamic_array(int **arr, size_t *used, size_t *size) {
-  if (*used + 1 >= *size) { // keep 1 extra space for insertion
+  if (*used + 2 == *size) { // keep 1 extra space for insertion
     *size *= 2;
     *arr = realloc(*arr, *size * sizeof(int));
   }
@@ -65,6 +64,11 @@ void append_dynamic_array(int **arr, size_t *used, size_t *size, int element) {
 }
 
 void deduct_dynamic_array(int **arr, size_t *used) {
+  if (*used == (size_t)0) {
+    printf("Stack empty\n");
+    return;
+  }
+
   printf("Deleted element %d at index %zu\n", (*arr)[*used - 1], *used - 1);
   (*used)--;
 }

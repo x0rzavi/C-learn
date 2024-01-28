@@ -22,6 +22,7 @@ void delete_position(node **head, node **tail, int *node_count,
                      int index); // indexing starts AT 1 and NOT 0
 void delete_before(node **head, int *node_count, int element);
 void delete_after(node **head, node **tail, int *node_count, int element);
+void delete_element(node **head, node **tail, int *node_count, int element);
 void display(node **head, int node_count);
 void free_linked_list(node **head, int *node_count);
 void get_node_count(int node_count);
@@ -43,9 +44,10 @@ int main(void) {
   printf("8. Delete position\n");
   printf("9. Delete before\n");
   printf("10. Delete after\n");
-  printf("11. Display\n");
-  printf("12. Count\n");
-  printf("13. Linear search\n");
+  printf("11. Delete element\n");
+  printf("12. Display\n");
+  printf("13. Count\n");
+  printf("14. Linear search\n");
   printf("98. Clear list\n");
   printf("99. Exit\n");
 
@@ -67,9 +69,10 @@ int main(void) {
       case 8: delete_position(&head, &tail, &node_count, get_data("Enter index to delete at: ")); break;
       case 9: delete_before(&head, &node_count, get_data("Enter element to delete before: ")); break;
       case 10: delete_after(&head, &tail, &node_count, get_data("Enter element to delete after: ")); break;
-      case 11: display(&head, node_count); break;
-      case 12: get_node_count(node_count); break;
-      case 13: linear_search(&head, get_data("Enter element to search: ")); break;
+      case 11: delete_element(&head, &tail, &node_count, get_data("Enter element to delete: ")); break;
+      case 12: display(&head, node_count); break;
+      case 13: get_node_count(node_count); break;
+      case 14: linear_search(&head, get_data("Enter element to search: ")); break;
       case 98: free_linked_list(&head, &node_count); break;
       case 99: free_linked_list(&head, &node_count); exit(0);
       default: printf("Invalid choice\n");
@@ -317,7 +320,7 @@ void delete_after(node **head, node **tail, int *node_count, int element) {
   if (trav != NULL && trav->next != NULL) { // check if NOT last node
     node *temp = trav->next;
     trav->next = temp->next;
-    if (trav->next == NULL) { // if trav is last node
+    if (trav->next == NULL) { // if trav is now last node
       *tail = trav;
     }
     printf("Deleted node with data: %d\n", temp->data);
@@ -326,6 +329,39 @@ void delete_after(node **head, node **tail, int *node_count, int element) {
     display(head, *node_count);
   } else {
     printf("Element %d not found or no more nodes to delete\n", element);
+  }
+}
+
+void delete_element(node **head, node **tail, int *node_count, int element) {
+  if (*head == NULL) {
+    printf("Linked list empty\n");
+    return;
+  }
+
+  if ((*head)->data == element) {
+    delete_beginning(head, node_count);
+    return;
+  }
+
+  node *trav = *head;
+  while (trav->next != NULL &&
+         trav->next->data !=
+             element) { // traverse UNTIL JUST BEFORE node to delete
+    trav = trav->next;
+  }
+
+  if (trav->next != NULL) {
+    node *temp = trav->next;
+    trav->next = temp->next;
+    if (trav->next == NULL) { // if trav is now last node
+      *tail = trav;
+    }
+    printf("Deleted node with data: %d\n", temp->data);
+    free(temp);
+    (*node_count)--;
+    display(head, *node_count);
+  } else {
+    printf("Element %d not found\n", element);
   }
 }
 

@@ -26,6 +26,36 @@ int main(void) {
   node *head = NULL;
   node *tail = NULL;
 
+  printf("1. Enqueue\n");
+  printf("2. Dequeue\n");
+  printf("3. Peek\n");
+  printf("4. Count\n");
+  printf("5. Linear search\n");
+  printf("6. Display\n");
+  printf("98. Clear\n");
+  printf("99. Exit\n");
+
+  while (true) {
+    int choice;
+    printf("\nEnter choice: ");
+    fflush(stdout);
+    scanf("%d", &choice);
+
+    // clang-format off
+    switch (choice) {
+      case 1: enqueue(&head, &tail, &node_count, get_data("Enter element to enqueue: ")); break;
+      case 2: dequeue(&head, &node_count); break;
+      case 3: peek(&head); break;
+      case 4: get_node_count(node_count); break;
+      case 5: linear_search(&head, get_data("Enter element to search: ")); break;
+      case 6: display(&head, node_count); break;
+      case 98: free_linked_list(&head, &node_count); break;
+      case 99: free_linked_list(&head, &node_count); exit(0); // NOLINT
+      default: printf("Invalid choice\n");
+    }
+    // clang-format on
+  }
+
   enqueue(&head, &tail, &node_count, 100);
   enqueue(&head, &tail, &node_count, 200);
   enqueue(&head, &tail, &node_count, 300);

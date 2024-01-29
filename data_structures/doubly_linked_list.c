@@ -83,6 +83,7 @@ int main(void) {
 }
 
 node *create_node(int data) {
+  // https://youtu.be/B31LgI4Y4DQ?t=8870&si=gdywQfq3SaHaojhr
   node *new_node = malloc(sizeof(node));
   new_node->data = data;
   new_node->prev = NULL;

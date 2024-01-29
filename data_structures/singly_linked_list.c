@@ -84,7 +84,7 @@ int main(void) {
       case 15: get_node_count(node_count); break;
       case 16: linear_search(&head, get_data("Enter element to search: ")); break;
       case 17: reverse_iterative(&head, &tail, node_count); break;
-      case 18: head = reverse_recursion(&head, &tail, node_count); break;
+      case 18: head = reverse_recursion(&head, &tail, node_count); display_iterative(&head, node_count); break;
       case 98: free_linked_list(&head, &node_count); break;
       case 99: free_linked_list(&head, &node_count); exit(0);
       default: printf("Invalid choice\n");
@@ -455,6 +455,7 @@ node *reverse_recursion(node **head, node **tail, int node_count) {
   }
 
   node *new_head = reverse_recursion(&((*head)->next), tail, node_count);
+  *tail = *head;
   (*head)->next->next = *head;
   (*head)->next = NULL;
   return new_head;

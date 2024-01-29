@@ -10,8 +10,8 @@ void display(int arr[], int *tos);
 int get_data(char *prompt);
 
 int main(void) {
-  int arr[MAXSIZE];
-  int tos = -1;
+  int stack[MAXSIZE];
+  int tos = -1; // empty stack
 
   printf("1. Push\n");
   printf("2. Pop\n");
@@ -27,10 +27,10 @@ int main(void) {
 
     // clang-format off
     switch (choice) {
-      case 1: push(arr, &tos, get_data("Enter data to push: ")); break;
-      case 2: pop(arr, &tos); break;
-      case 3: peek(arr, &tos); break;
-      case 4: display(arr, &tos); break;
+      case 1: push(stack, &tos, get_data("Enter data to push: ")); break;
+      case 2: pop(stack, &tos); break;
+      case 3: peek(stack, &tos); break;
+      case 4: display(stack, &tos); break;
       case 99: exit(0);
       default: printf("Invalid choice\n");
     }

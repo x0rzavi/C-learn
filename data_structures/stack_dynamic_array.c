@@ -59,8 +59,8 @@ void init_stack(int **arr, size_t *tos, size_t *size, int initial_size) {
 }
 
 void check_resize(int **arr, size_t *tos, size_t *size) {
-  if (*tos + 2 == *size) { // *tos + 2 since *tos = -1 initially & + 1 to
-                           // adjust for pre-increment
+  if (*tos + 2 == *size) { // stack overflow; *tos + 2 since *tos = -1 initially
+                           // & +1 to adjust for pre-increment
     *size *= 2;
     *arr = realloc(*arr, *size * sizeof(int));
   }

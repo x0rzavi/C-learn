@@ -23,7 +23,11 @@ void delete_position(node **head, node **tail, int *node_count,
 void delete_before(node **head, int *node_count, int element);
 void delete_after(node **head, node **tail, int *node_count, int element);
 void delete_element(node **head, node **tail, int *node_count, int element);
-void display(node **head, int node_count);
+void display_iterative(node **head, int node_count);
+void display_recursion(node **head, int node_count);
+void display_reverse_recursion(node **head, int node_count);
+void reverse_iterative(node **head, node **tail, int node_count);
+node *reverse_recursion(node **head, node **tail, int node_count);
 void free_linked_list(node **head, int *node_count);
 void get_node_count(int node_count);
 void linear_search(node **head, int element);
@@ -45,9 +49,13 @@ int main(void) {
   printf("9. Delete before\n");
   printf("10. Delete after\n");
   printf("11. Delete element\n");
-  printf("12. Display\n");
-  printf("13. Count\n");
-  printf("14. Linear search\n");
+  printf("12. Display iterative\n");
+  printf("13. Display recursion\n");
+  printf("14. Display reverse recursion\n");
+  printf("15. Count\n");
+  printf("16. Linear search\n");
+  printf("17. Reverse iterative\n");
+  printf("18. Reverse recursion\n");
   printf("98. Clear list\n");
   printf("99. Exit\n");
 
@@ -70,9 +78,13 @@ int main(void) {
       case 9: delete_before(&head, &node_count, get_data("Enter element to delete before: ")); break;
       case 10: delete_after(&head, &tail, &node_count, get_data("Enter element to delete after: ")); break;
       case 11: delete_element(&head, &tail, &node_count, get_data("Enter element to delete: ")); break;
-      case 12: display(&head, node_count); break;
-      case 13: get_node_count(node_count); break;
-      case 14: linear_search(&head, get_data("Enter element to search: ")); break;
+      case 12: display_iterative(&head, node_count); break;
+      case 13: display_recursion(&head, node_count); break;
+      case 14: display_reverse_recursion(&head, node_count); break;
+      case 15: get_node_count(node_count); break;
+      case 16: linear_search(&head, get_data("Enter element to search: ")); break;
+      case 17: reverse_iterative(&head, &tail, node_count); break;
+      case 18: head = reverse_recursion(&head, &tail, node_count); break;
       case 98: free_linked_list(&head, &node_count); break;
       case 99: free_linked_list(&head, &node_count); exit(0);
       default: printf("Invalid choice\n");
@@ -96,7 +108,7 @@ void insert_beginning(node **head, node **tail, int *node_count, int data) {
     *tail = new_node;
   }
   (*node_count)++;
-  display(head, *node_count);
+  display_iterative(head, *node_count);
 }
 
 void insert_end(node **head, node **tail, int *node_count, int data) {
@@ -110,7 +122,7 @@ void insert_end(node **head, node **tail, int *node_count, int data) {
     *tail = new_node;
   }
   (*node_count)++;
-  display(head, *node_count);
+  display_iterative(head, *node_count);
 }
 
 void insert_position(node **head, node **tail, int *node_count, int data,
@@ -135,7 +147,7 @@ void insert_position(node **head, node **tail, int *node_count, int data,
     new_node->next = trav->next;
     trav->next = new_node;
     (*node_count)++;
-    display(head, *node_count);
+    display_iterative(head, *node_count);
   } else {
     printf("Invalid index %d\n", index);
   }
@@ -164,7 +176,7 @@ void insert_before(node **head, node **tail, int *node_count, int data,
     new_node->next = trav->next;
     trav->next = new_node;
     (*node_count)++;
-    display(head, *node_count);
+    display_iterative(head, *node_count);
   } else {
     printf("Element %d not found\n", element);
   }
@@ -195,7 +207,7 @@ void insert_after(node **head, node **tail, int *node_count, int data,
   } else {
     printf("Element %d not found\n", element);
   }
-  display(head, *node_count);
+  display_iterative(head, *node_count);
 }
 
 void delete_beginning(node **head, int *node_count) {
@@ -209,7 +221,7 @@ void delete_beginning(node **head, int *node_count) {
   printf("Deleted node with data: %d\n", temp->data);
   free(temp);
   (*node_count)--;
-  display(head, *node_count);
+  display_iterative(head, *node_count);
 }
 
 void delete_end(node **head, node **tail, int *node_count) {
@@ -225,6 +237,7 @@ void delete_end(node **head, node **tail, int *node_count) {
     *head = NULL;
     *tail = NULL;
     (*node_count)--;
+    return;
   } else {
     node *trav = *head;
     while (trav->next != *tail) { // traverse UNTIL JUST BEFORE tail
@@ -236,7 +249,7 @@ void delete_end(node **head, node **tail, int *node_count) {
     (*tail)->next = NULL;
     (*node_count)--;
   }
-  display(head, *node_count);
+  display_iterative(head, *node_count);
 }
 
 void delete_position(node **head, node **tail, int *node_count,
@@ -263,7 +276,7 @@ void delete_position(node **head, node **tail, int *node_count,
     printf("Deleted node with data: %d\n", curr->data);
     free(curr);
     (*node_count)--;
-    display(head, *node_count);
+    display_iterative(head, *node_count);
   } else {
     printf("Invalid index %d\n", index);
   }
@@ -298,7 +311,7 @@ void delete_before(node **head, int *node_count, int element) {
     printf("Deleted node with data: %d\n", curr->data);
     free(curr);
     (*node_count)--;
-    display(head, *node_count);
+    display_iterative(head, *node_count);
   } else {
     printf("Element %d not found\n", element);
   }
@@ -326,7 +339,7 @@ void delete_after(node **head, node **tail, int *node_count, int element) {
     printf("Deleted node with data: %d\n", temp->data);
     free(temp);
     (*node_count)--;
-    display(head, *node_count);
+    display_iterative(head, *node_count);
   } else {
     printf("Element %d not found or no more nodes to delete\n", element);
   }
@@ -359,13 +372,13 @@ void delete_element(node **head, node **tail, int *node_count, int element) {
     printf("Deleted node with data: %d\n", temp->data);
     free(temp);
     (*node_count)--;
-    display(head, *node_count);
+    display_iterative(head, *node_count);
   } else {
     printf("Element %d not found\n", element);
   }
 }
 
-void display(node **head, int node_count) {
+void display_iterative(node **head, int node_count) {
   if (node_count == 0) {
     printf("Linked list empty\n");
     return;
@@ -380,6 +393,71 @@ void display(node **head, int node_count) {
     // printf("%s", buffer); // TEST
   }
   printf(" TAIL\n");
+}
+
+void display_recursion(node **head, int node_count) {
+  if (node_count == 0) {
+    printf("Linked list empty\n");
+    return;
+  }
+
+  if (*head == NULL) { // base case for recursive call
+    printf("\n");
+    return;
+  }
+  printf("%d ", (*head)->data);
+  display_recursion(&((*head)->next), node_count);
+}
+
+void display_reverse_recursion(node **head, int node_count) {
+  if (node_count == 0) {
+    printf("Linked list empty\n");
+    return;
+  }
+
+  if (*head == NULL) { // base case for recusive call
+    return;
+  }
+  display_reverse_recursion(&((*head)->next), node_count);
+  printf("%d ", (*head)->data);
+}
+
+void reverse_iterative(node **head, node **tail, int node_count) {
+  // https://youtu.be/G0_I-ZF0S38?si=kyfVL9gKlVrGCMvJ
+  if (node_count == 0) {
+    printf("Linked list empty\n");
+    return;
+  }
+
+  node *curr = *head;
+  node *prev = NULL;
+  node *next = NULL;
+  *tail = *head;
+  while (curr != NULL) {
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
+  }
+  *head = prev;
+  display_iterative(head, node_count);
+}
+
+node *reverse_recursion(node **head, node **tail, int node_count) {
+  // https://youtu.be/G0_I-ZF0S38?si=kyfVL9gKlVrGCMvJ
+  if (node_count == 0) {
+    printf("Linked list empty\n");
+    return NULL;
+  }
+
+  if ((*head)->next == NULL) { // base case for recursive call
+    return *head;
+  }
+
+  node *new_head = reverse_recursion(&((*head)->next), tail, node_count);
+  (*head)->next->next = *head;
+  (*head)->next = NULL;
+  return new_head;
 }
 
 void free_linked_list(node **head, int *node_count) {

@@ -86,7 +86,7 @@ int main(void) {
       case 17: reverse_iterative(&head, &tail, node_count); break;
       case 18: head = reverse_recursion(&head, &tail, node_count); display_iterative(&head, node_count); break;
       case 98: free_linked_list(&head, &node_count); break;
-      case 99: free_linked_list(&head, &node_count); exit(0);
+      case 99: free_linked_list(&head, &node_count); exit(EXIT_SUCCESS);
       default: printf("Invalid choice\n");
     }
     // clang-format on

@@ -44,7 +44,7 @@ int main(void) {
       case 6: linear_search(&arr, &tos, get_data("Enter element to search: ")); break;
       case 7: display(&arr, tos); break;
       case 98: clear_stack(&arr, &tos, &size); break;
-      case 99: free(arr); exit(0); // NOLINT
+      case 99: free(arr); exit(EXIT_SUCCESS); // NOLINT
       default: printf("Invalid choice\n");
     }
     // clang-format on

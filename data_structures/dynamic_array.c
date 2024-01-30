@@ -52,7 +52,7 @@ void check_resize_dynamic_array(int **arr, size_t *used, size_t *size) {
 void check_bounds_dynamic_array(size_t *used, size_t index) {
   if (index < 0 || index > *used - 1) { // indexing starts from 0
     printf("Out of bounds\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 }
 

@@ -31,7 +31,7 @@ int main(void) {
       case 2: pop(stack, &tos); break;
       case 3: peek(stack, &tos); break;
       case 4: display(stack, &tos); break;
-      case 99: exit(0);
+      case 99: exit(EXIT_SUCCESS);
       default: printf("Invalid choice\n");
     }
     // clang-format on

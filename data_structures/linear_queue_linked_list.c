@@ -50,7 +50,7 @@ int main(void) {
       case 5: linear_search(&head, get_data("Enter element to search: ")); break;
       case 6: display(&head, node_count); break;
       case 98: free_linked_list(&head, &node_count); break;
-      case 99: free_linked_list(&head, &node_count); exit(0); // NOLINT
+      case 99: free_linked_list(&head, &node_count); exit(EXIT_SUCCESS); // NOLINT
       default: printf("Invalid choice\n");
     }
     // clang-format on

@@ -1,3 +1,4 @@
+// TODO: refactor & restructure code
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,11 +18,6 @@ void find_maximum(node *root);
 int find_height(node *root);
 void free_tree(node *root);
 int max(int a, int b);
-void enqueue(node *queue[], int *front, int *rear, node *root);
-void dequeue(node *queue[], int *front, int *rear);
-node *peek(node *queue[], int *front);
-bool is_empty(int *front);
-void level_order_traversal(node *root, node *queue[], int *front, int *rear);
 
 int main(void) {
   node *queue[MAXSIZE];
@@ -40,14 +36,14 @@ int main(void) {
   find_minimum(root);
   find_maximum(root);
   printf("Height of tree %d\n", find_height(root));
-  level_order_traversal(root, queue, &front, &rear);
   free_tree(root);
 }
 
 node *create_node(int data) {
   node *new_node = malloc(sizeof(node));
   new_node->data = data;
-  new_node->left = new_node->right = NULL;
+  new_node->left = NULL;
+  new_node->right = NULL;
   return new_node;
 }
 
@@ -117,62 +113,3 @@ int find_height(node *root) {
 }
 
 int max(int a, int b) { return a > b ? a : b; }
-
-void level_order_traversal(node *root, node *queue[], int *front, int *rear) {
-  if (root == NULL) {
-    printf("Empty binary search tree\n");
-    return;
-  }
-
-  enqueue(queue, front, rear, root);
-  while (!is_empty(front)) {
-    root = peek(queue, front);
-    if (root->left != NULL) {
-      enqueue(queue, front, rear, root->left);
-    }
-    if (root->right != NULL) {
-      enqueue(queue, front, rear, root->right);
-    }
-    dequeue(queue, front, rear);
-  }
-  printf("\n");
-}
-
-void enqueue(node *queue[], int *front, int *rear, node *root) {
-  if (*rear + 1 == MAXSIZE) {
-    printf("Queue overflow\n");
-    return;
-  }
-
-  if (*rear == -1 && *front == -1) {
-    *rear = *front = 0;
-  } else {
-    (*rear)++;
-  }
-  queue[*rear] = root;
-}
-
-void dequeue(node *queue[], int *front, int *rear) {
-  if (*front == -1) {
-    printf("Queue underflow\n");
-    return;
-  }
-
-  printf("%d ", queue[*front]->data);
-  if (*rear == *front) {
-    *rear = *front = -1;
-  } else {
-    (*front)++;
-  }
-}
-
-node *peek(node *queue[], int *front) {
-  if (*front == -1) {
-    printf("Queue underflow\n");
-    return NULL;
-  }
-
-  return queue[*front];
-}
-
-bool is_empty(int *front) { return (*front == -1); }

@@ -1,4 +1,3 @@
-// TODO: refactor & restructure code
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,7 +1,8 @@
+#include <limits.h> // INT_MIN INT_MAX
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define MAXSIZE 40
+#define MAXSIZE 20
 
 typedef struct node {
   int data;
@@ -24,6 +25,7 @@ void level_order_traversal(
 void preorder_traversal(node *root);
 void inorder_traversal(node *root);
 void postorder_traversal(node *root);
+bool check_if_bst(node *root, int minvalue, int maxvalue);
 
 int main(void) {
   node *queue[MAXSIZE];
@@ -31,23 +33,32 @@ int main(void) {
   int rear = -1;
 
   node *root = NULL;
-  insert_level_order(&root, queue, front, rear, 1);
-  insert_level_order(&root, queue, front, rear, 2);
-  insert_level_order(&root, queue, front, rear, 3);
   insert_level_order(&root, queue, front, rear, 4);
-  insert_level_order(&root, queue, front, rear, 5);
+  insert_level_order(&root, queue, front, rear, 2);
+  insert_level_order(&root, queue, front, rear, 10);
+  insert_level_order(&root, queue, front, rear, 1);
+  insert_level_order(&root, queue, front, rear, 3);
+  insert_level_order(&root, queue, front, rear, 2);
 
   printf("\nLevel order traversal: ");
+  fflush(stdout);
   level_order_traversal(root, queue, front, rear);
 
   printf("\nPreorder order traversal: ");
+  fflush(stdout);
   preorder_traversal(root);
 
   printf("\nInorder order traversal: ");
+  fflush(stdout);
   inorder_traversal(root);
 
   printf("\nPostorder order traversal: ");
+  fflush(stdout);
   postorder_traversal(root);
+
+  printf("\n%s\n", check_if_bst(root, INT_MIN, INT_MAX)
+                       ? "Binary tree is BST"
+                       : "Binary tree is not BST");
   free_tree(root);
 }
 
@@ -181,4 +192,18 @@ void postorder_traversal(node *root) {
   postorder_traversal(root->left);
   postorder_traversal(root->right);
   printf("%d ", root->data);
+}
+
+bool check_if_bst(node *root, int minvalue, int maxvalue) {
+  if (root == NULL) {
+    return true;
+  }
+
+  if (root->data >= minvalue && root->data < maxvalue &&
+      check_if_bst(root->left, minvalue, root->data) &&
+      check_if_bst(root->right, root->data, maxvalue)) {
+    return true;
+  } else {
+    return false;
+  }
 }

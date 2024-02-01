@@ -12,28 +12,30 @@ typedef struct node {
 node *create_node(int data);
 void search(node *root, int data);
 void insert(node **root, int data);
-void find_minimum(node *root);
-void find_maximum(node *root);
+void delete_node(node **root, int data);
+node *find_minimum(node *root);
+node *find_maximum(node *root);
 int find_height(node *root);
 void free_tree(node *root);
 int max(int a, int b);
 
 int main(void) {
-  node *queue[MAXSIZE];
-  int front = -1;
-  int rear = -1;
-
   node *root = NULL;
-  insert(&root, 4);
-  insert(&root, 10);
-  insert(&root, 6);
+  insert(&root, 12);
   insert(&root, 5);
-  insert(&root, 1);
-  insert(&root, 8);
+  insert(&root, 15);
   insert(&root, 3);
-  search(root, 8);
-  find_minimum(root);
-  find_maximum(root);
+  insert(&root, 7);
+  insert(&root, 13);
+  insert(&root, 17);
+  insert(&root, 1);
+  insert(&root, 9);
+  insert(&root, 14);
+  insert(&root, 20);
+  delete_node(&root, 15);
+  search(root, 15);
+  printf("Minimum element: %d\n", find_minimum(root)->data);
+  printf("Maximum element: %d\n", find_maximum(root)->data);
   printf("Height of tree %d\n", find_height(root));
   free_tree(root);
 }
@@ -56,9 +58,38 @@ void insert(node **root, int data) {
   }
 }
 
+void delete_node(node **root, int data) {
+  if (*root == NULL) {
+    return;
+  }
+
+  if (data < (*root)->data) {
+    delete_node(&((*root)->left), data);
+  } else if (data > (*root)->data) {
+    delete_node(&((*root)->right), data);
+  } else if (data == (*root)->data) { // found node with data
+    if ((*root)->left == NULL && (*root)->right == NULL) { // if 0 child
+      free(*root);
+      *root = NULL;
+    } else if ((*root)->left == NULL) { // if 1 child
+      node *temp = *root;
+      *root = (*root)->right;
+      free(temp);
+    } else if ((*root)->right == NULL) { // if 1 child
+      node *temp = *root;
+      *root = (*root)->left;
+      free(temp);
+    } else { // if 2 children
+      node *minimum_right_subtree = find_minimum((*root)->right);
+      (*root)->data = minimum_right_subtree->data;
+      delete_node(&((*root)->right), minimum_right_subtree->data);
+    }
+  }
+}
+
 void search(node *root, int data) {
   if (root == NULL) {
-    printf("Empty binary search tree\n");
+    printf("Element not found\n");
   } else if (root->data == data) {
     printf("Found element %d\n", data);
   } else if (data <= root->data) {
@@ -76,29 +107,31 @@ void free_tree(node *root) {
   }
 }
 
-void find_minimum(node *root) {
+node *find_minimum(node *root) {
   if (root == NULL) {
-    printf("Empty binary search tree\n");
-    return;
+    // return -1;
+    return NULL;
   }
 
   if (root->left == NULL) {
-    printf("Minimum element %d\n", root->data);
+    // return root->data;
+    return root;
   } else {
-    find_minimum(root->left);
+    return find_minimum(root->left);
   }
 }
 
-void find_maximum(node *root) {
+node *find_maximum(node *root) {
   if (root == NULL) {
-    printf("Empty binary search tree\n");
-    return;
+    // return -1;
+    return NULL;
   }
 
   if (root->right == NULL) {
-    printf("Maximum element %d\n", root->data);
+    // return root->data;
+    return root;
   } else {
-    find_maximum(root->right);
+    return find_maximum(root->right);
   }
 }
 

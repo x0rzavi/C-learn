@@ -1,25 +1,26 @@
-// WIP
-//
-// insert an element from unsorted array to correct position in sorted array
-// https://www.youtube.com/watch?v=3GC83dh4cf0
+// TODO: Refactor
+#include <stdbool.h>
 #include <stdio.h>
 
-int main() {
-        int n = 7;
-        int arr[] = {12, 64, 45, 23, 51, 19, 8};
+void insertion_sort(int arr[], int length);
 
-        for (int i = 1; i < n; i++) {
-                int curr = arr[i];
-                int j = i - i;
-                while (arr[j] > curr && j >= 0) {
-                        arr[j + 1] = arr[j];
-                        j--;
-                }
-                arr[j + 1] = curr;
-        }
+int main(void) {
+  int arr[9] = {3, 7, 4, 5, 1, 9, 2, 6, 1};
+  insertion_sort(arr, 9);
+  for (int i = 0; i < 9; i++) {
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+}
 
-        for (int i = 0; i < n; i++) {
-                printf("%d ", arr[i]); // ascending order
-        }
-
+void insertion_sort(int arr[], int length) {
+  for (int i = 1; i < length; i++) {
+    int shift = arr[i];
+    int j = i;
+    while (j > 0 && arr[j - 1] > shift) {
+      arr[j] = arr[j - 1];
+      j--;
+    }
+    arr[j] = shift;
+  }
 }

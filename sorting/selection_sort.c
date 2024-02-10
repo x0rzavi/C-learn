@@ -1,24 +1,28 @@
-// find minimum element in unsorted array and swap with element at beginning
-// https://www.youtube.com/watch?v=dQa4A2Z0_Ro
+// TODO: Refactor
+#include <stdbool.h>
 #include <stdio.h>
 
-int main() {
-        int n = 7;
-        int arr[] = {12, 45, 23, 37, 51, 19, 8};
+void selection_sort(int arr[], int length);
 
-        for (int i = 0; i < n - 1; i++) { // until 2nd last element; no unsorted array after last element
-                for (int j = i; j < n; j++) { // compare starting from next upto last
-                        if (arr[j] < arr[i]) { // check if moving element is smaller than fixed element
-                                int temp = arr[j]; // swap if not in order: smaller < larger
-                                arr[j] = arr[i];
-                                arr[i] = temp;
-                        }
-                }
-        }
+int main(void) {
+  int arr[6] = {11, 25, 12, 22, 25, 64};
+  selection_sort(arr, 6);
+  for (int i = 0; i < 6; i++) {
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+}
 
-        for (int i = 0; i < n; i++) {
-                printf("%d ", arr[i]); // ascending order
-        }
-
-        return 0;
+void selection_sort(int arr[], int length) {
+  for (int i = 0; i < length; i++) {
+    int min_index = i;
+    for (int j = i + 1; j < length; j++) {
+      if (arr[j] < arr[min_index]) {
+        min_index = j;
+      }
+    }
+    int temp = arr[min_index];
+    arr[min_index] = arr[i];
+    arr[i] = temp;
+  }
 }

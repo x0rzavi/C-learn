@@ -1,13 +1,13 @@
+// TODO: Refactor
 #include <stdbool.h>
 #include <stdio.h>
 
 void bubble_sort(int arr[], int length);
 
-int arr[5] = {5, 1, 4, 2, 8};
-
 int main(void) {
-  bubble_sort(arr, 5);
-  for (int i = 0; i < 5; i++) {
+  int arr[6] = {5, 1, 4, 1, 2, 8};
+  bubble_sort(arr, 6);
+  for (int i = 0; i < 6; i++) {
     printf("%d ", arr[i]);
   }
   printf("\n");

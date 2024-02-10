@@ -18,6 +18,7 @@ node *find_maximum(node *root);
 int find_height(node *root);
 void free_tree(node *root);
 int max(int a, int b);
+node *inorder_successor(node *root, int data); // TODO: implement function
 
 int main(void) {
   node *root = NULL;

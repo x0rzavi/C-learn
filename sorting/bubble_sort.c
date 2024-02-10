@@ -1,24 +1,30 @@
-// repeatedly swap 2 elements if they are in wrong order
-// https://www.youtube.com/watch?v=xcPFUCh0jT0&t
+#include <stdbool.h>
 #include <stdio.h>
 
-int main() {
-        int n = 6;
-        int arr[] = {12, 45, 23, 51, 19, 8};
+void bubble_sort(int arr[], int length);
 
-        for (int i = 0; i < n - 1; i++) { // for n sized array, sorting procedure needs to be done n - 1 times
-                for (int j = 0; j < n - 1 - i; j++) { // traversing the array until 2nd last element; (j + 1) takes care of last element; ignore bubbled element (i) at last
-                        if (arr[j] > arr[j + 1]) { // check if adjcent is smaller or not
-                                int temp = arr[j + 1]; // swap if not in order: smaller < larger
-                                arr[j + 1] = arr[j];
-                                arr[j] = temp;
-                        }
-                }
-        }
+int arr[5] = {5, 1, 4, 2, 8};
 
-        for (int i = 0; i < n; i++) {
-                printf("%d ", arr[i]); // ascending order
-        }
+int main(void) {
+  bubble_sort(arr, 5);
+  for (int i = 0; i < 5; i++) {
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+}
 
-        return 0;
+void bubble_sort(int arr[], int length) {
+  bool swapped = true;
+  while (swapped) {
+    swapped = false;
+    for (int i = 1; i < length; i++) {
+      if (arr[i - 1] > arr[i]) {
+        int temp = arr[i - 1];
+        arr[i - 1] = arr[i];
+        arr[i] = temp;
+        swapped = true;
+      }
+    }
+    length--;
+  }
 }

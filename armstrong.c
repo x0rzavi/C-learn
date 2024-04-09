@@ -1,15 +1,15 @@
 #include <stdio.h>
 
 int main() {
-        int n, digit, sum = 0;
-        printf("Enter n: ");
-        scanf("%d", &n);
-        int copy = n;
+        int num, digit, sum = 0;
+        printf("Enter num: ");
+        scanf("%d", &num);
+        int copy = nnum;
 
-        while (n != 0) {
-                digit = n % 10;
+        while (nnum != 0) {
+                digit = nnum % 10;
                 sum = sum + (digit * digit * digit);
-                n = n / 10;
+                nnum = nnum / 10;
         }
 
         if (copy == sum) {

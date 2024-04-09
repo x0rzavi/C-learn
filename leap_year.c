@@ -3,10 +3,10 @@
 void checkLeap(int n);
 
 int main() {
-        int n;
+        int num;
         printf("Enter year: ");
-        scanf("%d", &n);
-        checkLeap(n);
+        scanf("%d", &num);
+        checkLeap(num);
 
         return 0;
 }

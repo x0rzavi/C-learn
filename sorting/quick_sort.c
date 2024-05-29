@@ -1,3 +1,6 @@
+// Quick Sort
+// Divide and Conquer
+// CLRS
 #include <stdio.h>
 
 void swap(int *a, int *b);
@@ -23,22 +26,16 @@ void swap(int *a, int *b) {
 }
 
 int partition(int arr[], int lower_index, int upper_index) {
-  int *pivot = &arr[lower_index];
-  int i = lower_index, j = upper_index;
-
-  while (i < j) { // stop if i & j are on same index
-    while (arr[i] <= *pivot) {
+  int *pivot = &arr[upper_index];
+  int i = lower_index - 1;
+  for (int j = lower_index; j < upper_index; j++) {
+    if (arr[j] <= *pivot) {
       i++;
-    }
-    while (arr[j] > *pivot) {
-      j--;
-    }
-    if (i < j) {
       swap(&arr[i], &arr[j]);
     }
   }
-  swap(pivot, &arr[j]);
-  return j; // pivot index
+  swap(&arr[i + 1], pivot);
+  return i + 1; // pivot index
 }
 
 void quicksort(int arr[], int lower_index, int upper_index) {

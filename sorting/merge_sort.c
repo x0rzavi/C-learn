@@ -1,3 +1,6 @@
+// Merge Sort
+// Divide and Conquer
+// CLRS
 #include <stdio.h>
 #include <stdlib.h>
 

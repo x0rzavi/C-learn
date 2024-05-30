@@ -44,7 +44,7 @@ void merge(int arr[], int p, int q, int r) {
     arr[k++] = arr_right[j++];
   }
 
-  // printf("Merge was called with:\n");  // debug
+  // printf("Merge was called with:\n"); // debug
   // printf("Left arr: ");                // debug
   // print_arr(arr_left, count_left);     // debug
   // printf("Right arr: ");               // debug
@@ -59,9 +59,9 @@ void merge_sort(int arr[], int p, int r) {
   if (p >= r) {
     return;
   } else {
-    int middle = (p + r) / 2;
-    merge_sort(arr, p, middle);     // recursively dividing
-    merge_sort(arr, middle + 1, r); // recursively dividing
+    int middle = (p + r) / 2;       // divide
+    merge_sort(arr, p, middle);     // conquer recursively
+    merge_sort(arr, middle + 1, r); // conquer recursively
     merge(arr, p, middle, r);       // combine
   }
 }

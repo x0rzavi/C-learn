@@ -1,15 +1,16 @@
+// wrong code
 #include <stdio.h>
 
 int main() {
   int num, digit, sum = 0;
   printf("Enter num: ");
   scanf("%d", &num);
-  int copy = nnum;
+  int copy = num;
 
-  while (nnum != 0) {
-    digit = nnum % 10;
+  while (num != 0) {
+    digit = num % 10;
     sum = sum + (digit * digit * digit);
-    nnum = nnum / 10;
+    num = num / 10;
   }
 
   if (copy == sum) {

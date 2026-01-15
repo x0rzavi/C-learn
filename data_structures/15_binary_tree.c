@@ -13,19 +13,23 @@ typedef struct node {
 node *create_node(int data);
 void insert_level_order(
     node **root, node *queue[], int front, int rear,
-    int data); // local front & rear to make use of apprently new queue
+    int data); // parameterized front & rear to make use of different queues
 void free_tree(node *root);
 void enqueue(node *queue[], int *front, int *rear, node *root);
 void dequeue(int *front, int *rear);
 node *peek(node *queue[], int *front);
 bool is_empty(int *front);
-void level_order_traversal(
+void level_order_traversal_queue(
     node *root, node *queue[], int front,
-    int rear); // local front & rear to make use of apprently new queue
+    int rear); // parameterized front & rear to make use of different queues
+void level_order_traversal_recursive(node *root, int tree_height);
+void print_level_order_traversal_recursive(node *root, int level);
 void preorder_traversal(node *root);
 void inorder_traversal(node *root);
 void postorder_traversal(node *root);
 bool check_if_bst(node *root, int minvalue, int maxvalue);
+int find_height(node *root);
+int max(int a, int b);
 
 int main(void) {
   node *queue[MAXSIZE];
@@ -39,10 +43,11 @@ int main(void) {
   insert_level_order(&root, queue, front, rear, 1);
   insert_level_order(&root, queue, front, rear, 3);
   insert_level_order(&root, queue, front, rear, 2);
+  insert_level_order(&root, queue, front, rear, 8);
 
-  printf("\nLevel order traversal: ");
+  printf("\nQueue based Level order traversal: ");
   fflush(stdout);
-  level_order_traversal(root, queue, front, rear);
+  level_order_traversal_queue(root, queue, front, rear);
 
   printf("\nPreorder order traversal: ");
   fflush(stdout);
@@ -56,9 +61,17 @@ int main(void) {
   fflush(stdout);
   postorder_traversal(root);
 
-  printf("\n%s\n", check_if_bst(root, INT_MIN, INT_MAX)
-                       ? "Binary tree is BST"
-                       : "Binary tree is not BST");
+  printf("\n%s", check_if_bst(root, INT_MIN, INT_MAX)
+                     ? "Binary tree is BST"
+                     : "Binary tree is not BST");
+
+  int tree_height = find_height(root);
+  printf("\nHeight of tree: %d", tree_height);
+
+  printf("\nRecursive Level order traversal: ");
+  fflush(stdout);
+  level_order_traversal_recursive(root, tree_height);
+
   free_tree(root);
 }
 
@@ -144,7 +157,8 @@ void free_tree(node *root) {
   }
 }
 
-void level_order_traversal(node *root, node *queue[], int front, int rear) {
+void level_order_traversal_queue(node *root, node *queue[], int front,
+                                 int rear) {
   if (root == NULL) {
     printf("Empty binary search tree\n");
     return;
@@ -161,6 +175,25 @@ void level_order_traversal(node *root, node *queue[], int front, int rear) {
     }
     printf("%d ", queue[front]->data);
     dequeue(&front, &rear);
+  }
+}
+
+void print_level_order_traversal_recursive(node *root, int level) {
+  if (root == NULL) {
+    return;
+  }
+
+  if (level == 1) {
+    printf("%d ", root->data);
+  } else if (level > 1) {
+    print_level_order_traversal_recursive(root->left, level - 1);
+    print_level_order_traversal_recursive(root->right, level - 1);
+  }
+}
+
+void level_order_traversal_recursive(node *root, int tree_height) {
+  for (int i = 1; i <= tree_height; ++i) {
+    print_level_order_traversal_recursive(root, i);
   }
 }
 
@@ -207,3 +240,14 @@ bool check_if_bst(node *root, int minvalue, int maxvalue) {
     return false;
   }
 }
+
+int find_height(node *root) {
+  if (root == NULL) {
+    return 0;
+  }
+  int height_left = find_height(root->left);
+  int height_right = find_height(root->right);
+  return (max(height_left, height_right) + 1);
+}
+
+int max(int a, int b) { return a > b ? a : b; }
